@@ -52,10 +52,11 @@ get_simple_weather () {
         w_type="Sun"
     elif echo "$w_type" | grep -i -q -E "rain|overcast|Light drizzle"; then
         w_type="Rain"
-    elif echo "$w_type" | grep -q -i "snow" || ((temp < 34)); then
+    elif echo "$w_type" | grep -q -i "snow" || ((temp < 1)); then
         w_type="Snow"
     else
         echo "Misc";
+        w_type="Misc"
     fi
 }
 
@@ -141,10 +142,19 @@ get_weather "$weather"
 echo "Real Weather: $w_type"
 get_simple_weather "$w_type" "$temp"
 
-echo "Time Type: $t_type, Weather Type: $w_type"
+# If no temperature is read
+if [[ ! "$temp" ]]; then
+    w_type="Misc"
+fi
+
+# If no timedata is received
+if [[  "$sunset" == 000 ]] || [[  "$sunrise" = 000 ]] ; then
+	t_type=Day
+fi
 
 if [[ "$t_type" == "Night" ]] && [[ "$w_type" == "Sun" ]]; then
     w_type="Misc"
 fi
-set_pape "$t_type" "$w_type"
 
+echo "Time Type: $t_type, Weather Type: $w_type"
+set_pape "$t_type" "$w_type"
