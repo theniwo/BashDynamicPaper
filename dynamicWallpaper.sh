@@ -48,7 +48,7 @@ get_simple_weather () {
     w_type=$1
     temp=$2
 
-    if echo "$w_type" | grep -i -q -E "sun|clear" && (( temp >= 34 )); then
+    if echo "$w_type" | grep -i -q -E "sun|clear|Partly cloudy" && (( temp >= 34 )); then
         w_type="Sun"
     elif echo "$w_type" | grep -i -q -E "rain|overcast|Light drizzle"; then
         w_type="Rain"
